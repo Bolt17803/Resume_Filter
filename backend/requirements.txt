@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+httpx
+whoosh
+requests
+pydantic
+python-multipart
+aiofiles
+PyPDF2
+langchain
+langchain-core
+langchain-google-genai

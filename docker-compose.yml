@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    container_name: fastapi-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - frontend
+
+  frontend:
+    build: ./resume_filter
+    container_name: react-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./resume_filter:/app
+    stdin_open: true
+    tty: true
