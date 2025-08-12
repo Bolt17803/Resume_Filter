@@ -52,7 +52,20 @@ function App() {
         method: 'POST',
         body: formData,
       });
-      await res.json(); // ignore direct response, fetch from backend below
+      
+      // Check if the response is OK (status code 2xx)
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status} ${res.statusText}`);
+      }
+
+      const data = await res.json(); // Parse the response
+      console.log('Backend response:', data); // Log the response for debugging
+
+      // Check if the response contains an error
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
       setSkillsInput('');
       setExperienceInput('');
       setFile(null);
@@ -60,7 +73,8 @@ function App() {
       setResultSession(sessionId);
       setPage('result');
     } catch (err) {
-      setResponse({ error: 'Upload failed' });
+      console.error('Upload error:', err.message); // Log the error for debugging
+      setResponse({ error: `Upload failed: ${err.message}` });
     } finally {
       setLoading(false);
     }
