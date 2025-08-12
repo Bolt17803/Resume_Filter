@@ -1,0 +1,26 @@
+- Strong Python development experience with focus on API design
+- Deep understanding of prompt engineering principles
+- Familiarity building and optimising RAG systems
+- Knowledge of vectorisation and semantic search
+- Understanding of audio/text processing pipelines
+- Experience with real-time data processing
+- Ability to work with serverless architectures
+- Understanding of different prompting techniques (few-shot, RAG, etc.)
+- Knowledge in optimising AI system performance and costs
+- Knowledge of conversation management and context handling
+- Ability to design modular, reusable AI components
+- Build robust Python backends that integrate with NextJS frontend
+- Design multi-tenant architectures using Supabase/Firebase
+- Implement secure data handling and processing pipelines
+- Deploy and maintain systems on Vercel
+- Develop monitoring and optimisation systems for AI interactions
+- Build scalable analysis pipelines for audio and text processing
+- Create efficient document processing and retrieval systems
+- Create efficient caching mechanisms
+- Implementing efficient audio processing pipelines
+- Creating streaming transcription systems
+- Building real-time feedback mechanisms
+- Designing modular prompt architectures
+- Implementing context-aware AI interactions
+- Building multi-tenant data structures
+- Implementing secure storage systems

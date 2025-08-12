@@ -1,0 +1,11 @@
+- Has built production-grade applications
+- Shows strong interest in AI/LLM development
+- Demonstrates ability to optimise for specific use cases
+- Writes clean, maintainable code
+- Works effectively with frontend teams
+- Passionate about improving education through technology
+- Experience designing robust AI architectures that scale
+- Experience implementing efficient and cost-effective solutions
+- Experience creating reliable and maintainable systems
+- Track record of contributing to AI capabilities in a product
+- Experience shaping product direction, especially in education-focused AI solutions

@@ -3,8 +3,9 @@ import React from 'react';
 
 const Sidebar = ({ sessions, selectedSession, onSessionSelect, onAddSession, onRemoveSession }) => (
   <aside style={{
-    width: '220px',
-    minHeight: '80vh',
+    width: '15vw',
+    height: '80vh',
+    overflowY: 'auto',
     background: 'rgba(255, 255, 255, 0.10)',
     boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.22), 0 2px 16px 0 rgba(0,0,0,0.10)',
     backdropFilter: 'blur(18px) saturate(160%)',
@@ -16,7 +17,7 @@ const Sidebar = ({ sessions, selectedSession, onSessionSelect, onAddSession, onR
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    position: 'absolute',
+    position: 'relative',
     top: '40px',
     left: '32px',
     zIndex: 10,

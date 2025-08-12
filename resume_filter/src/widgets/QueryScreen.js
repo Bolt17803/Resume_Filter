@@ -170,4 +170,4 @@ const QueryScreen = ({ fileName, sessionId, onBack }) => {
   );
 };
 
-export default QueryScreen;
+export default QueryScreen; 

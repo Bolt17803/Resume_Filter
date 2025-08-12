@@ -2,7 +2,7 @@ import React from 'react';
 
 const Loading = ({ text = "Processing, please wait..." }) => (
   <div style={{
-    position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+    position: 'absolute', top: 0, left: 0, width: '100vw', height: '100vh',
     background: 'rgba(255,255,255,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
   }}>
     <div style={{
