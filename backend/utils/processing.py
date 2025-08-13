@@ -44,14 +44,14 @@ async def get_skills_and_exp_score(model, skills_text, experience_text, resume_t
     ret = response.content.split(',')
     return ret[0], ret[1]
 
-async def get_query_answer(model, resume_text, question):
+async def get_query_answer(model, resume_text, job_skill_file, job_experience_file, question):
     sys_prompt = query_prompt()
 
     prompt_template = ChatPromptTemplate.from_messages(
         [("system", sys_prompt), ("user", "{question}")]
     )
 
-    prompt = prompt_template.invoke({"resume_file": resume_text, "question": question})
+    prompt = prompt_template.invoke({"resume_file": resume_text, "job_skill_file": job_skill_file, "job_experience_file": job_experience_file, "question": question})
 
     response = await model.ainvoke(prompt)
 

@@ -277,6 +277,8 @@ async def query_resume(request: Request):
     with open(file_path, "r", encoding="utf-8") as f:
         resume_text = f.read()
     
-    answer = await get_query_answer(model, resume_text, question)
+    job_skill_file = os.path.join(UPLOAD_FOLDER, session_id, "skills.txt")  
+    job_experience_file = os.path.join(UPLOAD_FOLDER, session_id, "experience.txt")
+    answer = await get_query_answer(model, resume_text, job_skill_file, job_experience_file, question)
 
     return {"answer": answer}
