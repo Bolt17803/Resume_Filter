@@ -5,6 +5,7 @@ import MainScreen from './widgets/MainScreen';
 import Loading from './widgets/Loading';
 import ResultScreen from './widgets/ResultScreen';
 import QueryScreen from './widgets/QueryScreen';
+import { useSessionWebSocket } from './hooks/useSessionWebSocket';
 
 function App() {
   const [skillsInput, setSkillsInput] = useState('');
@@ -140,6 +141,24 @@ function App() {
     };
     fetchResult();
   }, [page, resultSession]);
+
+  // WebSocket for session updates: show loading when processing, hide when done, and refresh results
+  useSessionWebSocket(selectedSession,
+    () => setLoading(true),
+    async () => {
+      setLoading(false);
+      // If on result page, refresh the result data
+      if (page === 'result' && resultSession) {
+        try {
+          const res = await fetch(`http://localhost:8000/session_result/${resultSession}`);
+          const data = await res.json();
+          setResultData(data);
+        } catch (e) {
+          setResultData({ error: 'Could not fetch result.' });
+        }
+      }
+    }
+  );
 
   return (
     <>

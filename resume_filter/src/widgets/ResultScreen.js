@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSessionWebSocket } from '../hooks/useSessionWebSocket';
 
 const ResultScreen = ({ response, sessionId, onQuery }) => {
   const isMulti = Array.isArray(response?.skill_match_score) && Array.isArray(response?.exp_match_score);
@@ -7,7 +8,19 @@ const ResultScreen = ({ response, sessionId, onQuery }) => {
   const [searchMinScore, setSearchMinScore] = useState(''); // min score for backend search
   const [searchResult, setSearchResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [resultData, setResultData] = useState(response);
   let rows = [];
+
+  useSessionWebSocket(sessionId,
+    () => setLoading(true), // onProcessing
+    async () => {           // onDone
+      setLoading(false);
+      // Fetch new results from backend
+      const res = await fetch(`http://localhost:8000/session_result/${sessionId}`);
+      const data = await res.json();
+      setResultData(data);
+    }
+  );
 
   if (isMulti) {
     const skills = response.skill_match_score;

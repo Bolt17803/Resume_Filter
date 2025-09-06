@@ -111,9 +111,11 @@ async def start_folder_monitoring(session_id: str, background_tasks: BackgroundT
                 current_files = set(os.listdir(candidate_pdfs_path))
                 new_files = current_files - seen_files
                 if new_files:
-                    for f in new_files:
-                        filename = f
-                        logger.info(f"New file detected in session {session_id}: {f}")
+                    for new_file in new_files:
+                        # Notify frontend that processing is starting
+                        await notify_clients(session_id, {"status": "processing", "file": new_file})
+                        filename = new_file
+                        logger.info(f"New file detected in session {session_id}: {new_file}")
                         pdf_file_path = os.path.join(candidate_pdfs_path, filename)
                         # Read PDF bytes
                         async with aiofiles.open(pdf_file_path, "rb") as pdf_f:
@@ -164,6 +166,9 @@ async def start_folder_monitoring(session_id: str, background_tasks: BackgroundT
                         # Write back to results.json
                         async with aiofiles.open(results_json_path, "w", encoding="utf-8") as res_f:
                             await res_f.write(json.dumps(results_data, indent=2))
+
+                        # Notify frontend that processing is done for this file
+                        await notify_clients(session_id, {"status": "done", "file": new_file})
 
                     seen_files.update(new_files)
                 await asyncio.sleep(2)  # Poll every 2 seconds
@@ -592,3 +597,25 @@ async def delete_session(session_id: str):
     except Exception as e:
         logger.error(f"Error deleting session {session_id}: {str(e)}")
         return JSONResponse(status_code=500, content={"error": f"Failed to delete session: {str(e)}"})
+
+active_connections = {}
+
+@app.websocket("/ws/{session_id}")
+async def websocket_endpoint(websocket: WebSocket, session_id: str):
+    await websocket.accept()
+    if session_id not in active_connections:
+        active_connections[session_id] = []
+    active_connections[session_id].append(websocket)
+    try:
+        while True:
+            await websocket.receive_text()  # Keep connection alive
+    except WebSocketDisconnect:
+        active_connections[session_id].remove(websocket)
+
+async def notify_clients(session_id, message):
+    if session_id in active_connections:
+        for ws in active_connections[session_id]:
+            try:
+                await ws.send_json(message)
+            except Exception:
+                pass  # Optionally handle broken connections
