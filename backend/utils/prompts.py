@@ -48,3 +48,43 @@ def query_prompt():
         Do not infer or fabricate details.
         """
     return system_template
+
+def jd_skill_exp_extractor_prompt():
+
+    system_template = """
+        You are an AI assistant proficient in extracting and structuring information from job descriptions. 
+        You are helping to parse job description files to extract key skills and experience requirements.
+
+        Given a job description file, you need to extract:
+        1. Skills - both technical and soft skills mentioned in the job requirements
+        2. Experience - years of experience, specific experience requirements, and qualifications
+
+        Instructions:
+        - Extract all skills mentioned in the job description, including programming languages, frameworks, tools, soft skills, etc.
+        - Extract experience requirements including years of experience, specific job roles, industry experience, etc.
+        - Format each skill and experience as a bullet point starting with "-"
+        - If no specific information is found for skills or experience, return an empty string for that field
+        - Only extract information that is explicitly mentioned in the job description
+
+        IMPORTANT: You must return ONLY a valid JSON object. Do not include any text before or after the JSON.
+        
+        Output format - Return ONLY a valid JSON object with this exact structure:
+        {{
+            "skills": "\\n- skill1\\n- skill2\\n- skill3",
+            "experience": "\\n- experience1\\n- experience2\\n- experience3"
+        }}
+
+        Example output:
+        {{
+            "skills": "\\n- Python\\n- React\\n- FastAPI\\n- SQL\\n- Team leadership",
+            "experience": "\\n- 3+ years software development experience\\n- Experience with web applications\\n- Bachelor's degree in Computer Science"
+        }}
+
+        CRITICAL REQUIREMENTS:
+        - Return ONLY the JSON object, nothing else
+        - Ensure the JSON is properly formatted and valid
+        - Use \\n for newlines within the strings
+        - If no skills or experience found, use empty strings: {{"skills": "", "experience": ""}}
+        - Only extract information explicitly stated in the job description
+        """
+    return system_template

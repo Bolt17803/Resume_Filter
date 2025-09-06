@@ -10,6 +10,7 @@ function App() {
   const [skillsInput, setSkillsInput] = useState('');
   const [experienceInput, setExperienceInput] = useState('');
   const [file, setFile] = useState(null);
+  const [jobDescriptionFile, setJobDescriptionFile] = useState(null);
   const [sessionCount, setSessionCount] = useState(1);
   const [response, setResponse] = useState(null);
   const [sessions, setSessions] = useState(['session-1']);
@@ -33,22 +34,27 @@ function App() {
     setFile(e.target.files[0]);
   };
 
+  const handleJobDescriptionFileChange = (e) => {
+    setJobDescriptionFile(e.target.files[0]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!file || !skillsInput || !experienceInput) {
-      alert('Please enter skills, experience, and select a file.');
+    if (!file) {
+      alert('Please select a resume file.');
       return;
     }
     const sessionId = selectedSession;
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('skills_input', skillsInput);
-    formData.append('experience_input', experienceInput);
     formData.append('session_id', sessionId);
+    if (jobDescriptionFile) {
+      formData.append('job_description_file', jobDescriptionFile);
+    }
 
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8000/upload/', {
+      const res = await fetch('http://localhost:8000/upload_files/', {
         method: 'POST',
         body: formData,
       });
@@ -66,10 +72,10 @@ function App() {
         throw new Error(data.error);
       }
 
-      setSkillsInput('');
-      setExperienceInput('');
       setFile(null);
+      setJobDescriptionFile(null);
       document.getElementById('file-input').value = '';
+      document.getElementById('job-description-input').value = '';
       setResultSession(sessionId);
       setPage('result');
     } catch (err) {
@@ -154,12 +160,10 @@ function App() {
           />
         ) : page === 'main' ? (
           <MainScreen
-            skillsInput={skillsInput}
-            handleSkillsChange={handleSkillsChange}
-            experienceInput={experienceInput}
-            handleExperienceChange={handleExperienceChange}
             file={file}
             handleFileChange={handleFileChange}
+            jobDescriptionFile={jobDescriptionFile}
+            handleJobDescriptionFileChange={handleJobDescriptionFileChange}
             handleSubmit={handleSubmit}
             selectedSession={selectedSession}
             response={response}

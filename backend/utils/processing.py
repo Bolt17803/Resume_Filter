@@ -1,6 +1,6 @@
 import PyPDF2
 from langchain_core.prompts import ChatPromptTemplate
-from utils.prompts import system_skill_exp_extractor_prompt, query_prompt
+from utils.prompts import system_skill_exp_extractor_prompt, query_prompt, jd_skill_exp_extractor_prompt
 import zipfile
 import os
 from PyPDF2 import PdfReader
@@ -52,6 +52,19 @@ async def get_query_answer(model, resume_text, job_skill_file, job_experience_fi
     )
 
     prompt = prompt_template.invoke({"resume_file": resume_text, "job_skill_file": job_skill_file, "job_experience_file": job_experience_file, "question": question})
+
+    response = await model.ainvoke(prompt)
+
+    return response.content
+
+async def get_jd_skill_exp(model, job_description_text):
+    sys_prompt = jd_skill_exp_extractor_prompt()
+
+    prompt_template = ChatPromptTemplate.from_messages(
+        [("system", sys_prompt), ("user", "{job_description_text}")]
+    )
+
+    prompt = prompt_template.invoke({"job_description_text": job_description_text})
 
     response = await model.ainvoke(prompt)
 
